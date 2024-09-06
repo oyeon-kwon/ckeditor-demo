@@ -1,11 +1,17 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import axios from "axios";
-import Editor from "./ckeditor5";
+import CustomClassicEditor from "./ckeditor5";
+import { FileLoader } from "@ckeditor/ckeditor5-upload/src/filerepository";
+import { Editor } from "@ckeditor/ckeditor5-core";
+import {
+  UploadAdapter,
+  UploadResponse,
+} from "@ckeditor/ckeditor5-upload/src/filerepository";
 
-function uploadAdapter(loader) {
+function uploadAdapter(loader: FileLoader): UploadAdapter {
   return {
     upload: () => {
-      return new Promise(async (resolve, reject) => {
+      return new Promise<UploadResponse>(async (resolve, reject) => {
         try {
           const file = await loader.file;
           const response = await axios.request({
@@ -21,7 +27,6 @@ function uploadAdapter(loader) {
           });
           resolve({
             // TODO: 서버 주소 변경
-
             default: `/${response.data.filename}`,
           });
         } catch (error) {
@@ -35,8 +40,10 @@ function uploadAdapter(loader) {
   };
 }
 
-function uploadPlugin(editor) {
-  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+function uploadPlugin(editor: Editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (
+    loader: FileLoader
+  ) => {
     return uploadAdapter(loader);
   };
 }
@@ -68,7 +75,7 @@ const editorConfiguration = {
 function CustomEditor(props: { initialData: string }) {
   return (
     <CKEditor
-      editor={Editor}
+      editor={CustomClassicEditor}
       config={editorConfiguration}
       data={props.initialData}
       onChange={(event, editor) => {
