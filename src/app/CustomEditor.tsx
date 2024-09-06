@@ -1,6 +1,6 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import axios from "axios";
-import CustomClassicEditor from "./ckeditor5";
+import CustomClassicEditor from "../../ckeditor5/build/ckeditor";
 import { FileLoader } from "@ckeditor/ckeditor5-upload/src/filerepository";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import {
